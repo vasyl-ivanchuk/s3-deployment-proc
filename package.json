@@ -1,0 +1,23 @@
+{
+  "name": "s3-deployment-proc",
+  "version": "1.0.0",
+  "description": "script to deploy folder to AWS S3",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/easygenerator/s3-deployment-proc.git"
+  },
+  "author": "petriv.roma@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/easygenerator/s3-deployment-proc/issues"
+  },
+  "homepage": "https://github.com/easygenerator/s3-deployment-proc#readme",
+  "dependencies": {
+    "aws-sdk": "^2.238.1",
+    "mime-types": "^2.1.18"
+  }
+}
