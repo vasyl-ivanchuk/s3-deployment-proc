@@ -23,61 +23,62 @@ module.exports = function deploy(directoryPath, rootFolderName, awsBucketName, a
     Bucket: awsBucketName
   }
   uploadFolderToS3();
-}
 
-function uploadFolderToS3(prefix = '') {
-  if (prefix) {
-    directoryPath = `${directoryPath}/${prefix}`;
-  }
-  fs.readdir(directoryPath, (e, files) => {
-    if (e) {
-      throw e;
+  function uploadFolderToS3(prefix = '') {
+    let folderPath = directoryPath;
+    if (prefix) {
+      folderPath = `${folderPath}/${prefix}`;
     }
-    if (!files || files.length === 0) {
-      console.log(`provided folder '${directoryPath}' is empty or does not exist.`);
-      console.log('Make sure the build was completed!');
-      return;
-    }
-    for (let fileName of files) {
-      const filePath = path.join(directoryPath, fileName);
-      fs.lstat(filePath, (err, stats) => {
-        if (err) {
-          throw err;
-        }
-        // run again if directory
-        if (stats.isDirectory()) {
-          if (prefix) {
-            uploadFolderToS3(`${prefix}/${fileName}`);
-          } else {
-            uploadFolderToS3(fileName);
+    fs.readdir(folderPath, (e, files) => {
+      if (e) {
+        throw e;
+      }
+      if (!files || files.length === 0) {
+        console.log(`provided folder '${folderPath}' is empty or does not exist.`);
+        console.log('Make sure the build was completed!');
+        return;
+      }
+      for (let fileName of files) {
+        const filePath = path.join(folderPath, fileName);
+        fs.lstat(filePath, (err, stats) => {
+          if (err) {
+            throw err;
           }
-        } else {
-          fs.readFile(filePath, (_err, fileContent) => {
-            if (_err) {
-              throw _err;
+          // run again if directory
+          if (stats.isDirectory()) {
+            if (prefix) {
+              uploadFolderToS3(`${prefix}/${fileName}`);
+            } else {
+              uploadFolderToS3(fileName);
             }
-            let key = prefix ? `${prefix}/${fileName}`.split('\\').join('/') : fileName;
-            if (rootFolderName) {
-              key = `${rootFolderName}/${key}`;
-            }
-            const objectParams = Object.assign({
-              Key: key,
-              Body: fileContent
-            }, params);
-            const contentType = mime.contentType(filePath);
-            if (contentType) {
-              objectParams.ContentType = contentType;
-            }
-            // upload file to S3
-            s3.putObject(objectParams, error => {
-              if (error) {
-                throw error;
+          } else {
+            fs.readFile(filePath, (_err, fileContent) => {
+              if (_err) {
+                throw _err;
               }
-              console.log(`${objectParams.Key} - success`);
+              let key = prefix ? `${prefix}/${fileName}`.split('\\').join('/') : fileName;
+              if (rootFolderName) {
+                key = `${rootFolderName}/${key}`;
+              }
+              const objectParams = Object.assign({
+                Key: key,
+                Body: fileContent
+              }, params);
+              const contentType = mime.contentType(filePath);
+              if (contentType) {
+                objectParams.ContentType = contentType;
+              }
+              // upload file to S3
+              s3.putObject(objectParams, error => {
+                if (error) {
+                  throw error;
+                }
+                console.log(`${objectParams.Key} - success`);
+              });
             });
-          });
-        }
-      });
-    }
-  });
+          }
+        });
+      }
+    });
+  }
 }

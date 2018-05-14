@@ -1,6 +1,6 @@
 {
   "name": "s3-deployment-proc",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "script to deploy folder to AWS S3",
   "main": "index.js",
   "scripts": {
