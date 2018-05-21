@@ -64,7 +64,7 @@ module.exports = function deploy(directoryPath, rootFolderName, awsBucketName, a
                 Key: key,
                 Body: fileContent
               }, params);
-              const contentType = mime.contentType(filePath);
+              const contentType = mime.contentType(path.extname(filePath));
               if (contentType) {
                 objectParams.ContentType = contentType;
               }
