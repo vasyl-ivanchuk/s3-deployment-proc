@@ -1,6 +1,6 @@
 {
   "name": "s3-deployment-proc",
-  "version": "1.0.3",
+  "version": "1.0.7",
   "description": "script to deploy folder to AWS S3",
   "main": "index.js",
   "scripts": {
@@ -18,6 +18,7 @@
   "homepage": "https://github.com/easygenerator/s3-deployment-proc#readme",
   "dependencies": {
     "aws-sdk": "^2.238.1",
-    "mime-types": "^2.1.18"
+    "mime-types": "^2.1.18",
+    "zip-folder": "^1.0.0"
   }
 }
